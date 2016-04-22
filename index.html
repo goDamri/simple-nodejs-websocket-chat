@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>aplikasi chat realtime</title>
+    <style>
+	* { margin: 0; padding: 0; box-sizing: border-box; }
+      form { padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: .1rem solid; padding: 9px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; border: none; padding: 10px; }
+      .obrolan { list-style-type: none; margin: 0; padding: 0; }
+      .obrolan li { padding: 5px 10px; }
+    </style>
+  </head>
+  <body>
+    <ul class="pesan"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Chat !</button>
+    </form>
+        <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.1/jquery.js"></script>
+    <script>
+        var rgb = [];
+
+        for(var i = 0; i < 3; i++)
+        rgb.push(Math.floor(Math.random() * 255));
+
+        var bgc = 'rgb('+ rgb.join(',') +')';
+
+        var me = "User" + Math.floor((Math.random() * 65555) + 6555);
+      var socket = io();
+      $('form').submit(function(){
+        var message = {'message': $('#m').val(),'sender' : me, 'bgc': bgc  }
+        socket.emit('ngobrol', message);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('ngobrol', function(msg){
+
+        $('.pesan').append($('<li style="background-color: '+ msg.bgc + '">').text(msg.msg));
+
+      });
+    </script>
+  </body>
+</html>
+
